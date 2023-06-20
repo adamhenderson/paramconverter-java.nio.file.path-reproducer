@@ -4,7 +4,7 @@
 
 This project demonstrates an issue where a ParamConverter for a java.nio.file.Path @RestPath is not called.
 
-Quarkus 3.2.1.Final
+Quarkus 3.1.2.Final
 
 Based off a blank 'quarkus create' command.
 
