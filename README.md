@@ -81,7 +81,7 @@ public class PathParamConverterProvider implements ParamConverterProvider {
         }
 
         if (rawType == PathWrapper.class) {
-            log.info("Looks like its assignable: " + rawType.getName());
+            log.info("PathWrapper -> Looks like its assignable: " + rawType.getName());
             return (ParamConverter<T>) new ParamConverter<PathWrapper>() {
 
                 @Override
@@ -127,14 +127,22 @@ INFO  [org.acm.PathParamConverterProvider] (Quarkus Main Thread) Looks like its 
 ```
 
 
-Invoking the endpoints using curl (or Swagger UI) 
+Invoking the endpoints using curl (or Swagger UI):
 
+Version using a PathWrapper works!
+```shell
+curl -X 'GET' \
+  'http://localhost:8080/viewwrapper/path%2Fto%2Ffile' \
+  -H 'accept: text/plain'
+```
+
+But calling the version using java.nio.file.Path: 
 ```shell
 curl -X 'GET' \
   'http://localhost:8080/view/path%2Fto%2Ffile' \
   -H 'accept: text/plain'
 ```
-results in the PathWrapper version working while the java.nio.file.Path version results in an exception:
+results in an exception:
 
 ```
 2023-06-20 18:00:01,211 ERROR [io.qua.ver.htt.run.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /view/path%2Fto%2Ffile failed, error id: c4dc5264-aaa4-4072-bd96-9004f237c606-1: java.lang.ClassCastException: class java.lang.String cannot be cast to class java.nio.file.Path (java.lang.String and java.nio.file.Path are in module java.base of loader 'bootstrap')
@@ -152,54 +160,3 @@ results in the PathWrapper version working while the java.nio.file.Path version 
 
 ```
 
-
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
-```
-
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
-
-## Packaging and running the application
-
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./mvnw package -Pnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Provided Code
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
