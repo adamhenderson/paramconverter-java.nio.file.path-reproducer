@@ -47,7 +47,7 @@ public class PathParamConverterProvider implements ParamConverterProvider {
         }
 
         if (rawType == PathWrapper.class) {
-            log.info("Looks like its assignable: " + rawType.getName());
+            log.info("PathWrapper -> Looks like its assignable: " + rawType.getName());
             return (ParamConverter<T>) new ParamConverter<PathWrapper>() {
 
                 @Override
