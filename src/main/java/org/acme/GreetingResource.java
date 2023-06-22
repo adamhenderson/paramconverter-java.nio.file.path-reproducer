@@ -3,10 +3,10 @@ package org.acme;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.reactive.RestPath;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
@@ -24,7 +24,7 @@ public class GreetingResource {
         schema = @Schema(implementation = String.class)
     )
     @Produces(MediaType.TEXT_PLAIN)
-    public String view(@RestPath java.nio.file.Path path) {
+    public String view(@PathParam("path") java.nio.file.Path path) {
         log.infof("GreetingResource.view(%s)", path.toString());
 
         return path.toString();
@@ -37,7 +37,7 @@ public class GreetingResource {
         schema = @Schema(implementation = String.class)
     )
     @Produces(MediaType.TEXT_PLAIN)
-    public String viewWrapper(@RestPath PathWrapper path) {
+    public String viewWrapper(@PathParam("path") PathWrapper path) {
         log.infof("GreetingResource.viewWrapper(%s)", path.toString());
 
         return path.toString();
